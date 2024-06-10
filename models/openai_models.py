@@ -6,18 +6,20 @@ config_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'config.ya
 load_config(config_path)
 
 
-def get_open_ai(temperature=0, model='gpt-3.5-turbo'):
+def get_open_ai(temperature=0, model='llama3_agentic'):
 
     llm = ChatOpenAI(
     model=model,
     temperature = temperature,
+    base_url = "http://localhost:11434/v1",
 )
     return llm
 
-def get_open_ai_json(temperature=0, model='gpt-3.5-turbo'):
+def get_open_ai_json(temperature=0, model='llama3_agentic'):
     llm = ChatOpenAI(
     model=model,
     temperature = temperature,
+    base_url = "http://localhost:11434/v1",
     model_kwargs={"response_format": {"type": "json_object"}},
 )
     return llm

@@ -20,6 +20,7 @@ from prompts.prompts import (
     reporter_prompt_template
     )
 from tools.google_serper import get_google_serper
+from tools.searxng import get_searxng
 from tools.basic_scraper import scrape_website
 from states.state import AgentGraphState, get_agent_graph_state, state
 # from utils.helper_functions import custom_print
@@ -81,7 +82,7 @@ def create_graph(model):
 
     graph.add_node(
         "serper_tool",
-        lambda state: get_google_serper(
+        lambda state: get_searxng(
             state=state,
             plan=lambda: get_agent_graph_state(state=state, state_key="planner_latest")
         )

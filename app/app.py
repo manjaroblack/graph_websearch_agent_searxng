@@ -1,6 +1,6 @@
 from agent_graph.graph import create_graph, compile_workflow
 
-model = 'gpt-4o'
+model = 'llama3_agentic'
 iterations = 40
 
 print ("Creating graph and compiling workflow...")
