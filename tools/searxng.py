@@ -1,9 +1,8 @@
 import os
-import ast
+import json
 from langchain_community.utilities import SearxSearchWrapper
 from utils.helper_functions import load_config
 from states.state import AgentGraphState
-
 
 load_config(os.path.join(os.path.dirname(__file__), '..', 'config', 'config.yaml'))
 load_config(os.path.join(os.path.dirname(__file__), '..', 'config', 'env.yaml'))
@@ -21,9 +20,9 @@ def format_results(organic_results):
 
 def get_searxng(state:AgentGraphState, plan):
     plan_data = plan().content
-    plan_data = ast.literal_eval(plan_data)
+    plan_data = json.loads(plan_data)
     search = plan_data.get("search_term")
 
-    results = searxng_search.results(search, num_results=5)
-    state = {**state, "serper_response": format_results(results)}
+    results = searxng_search.results(search, num_results=15)
+    state = {**state, "search_response": format_results(results)}
     return state

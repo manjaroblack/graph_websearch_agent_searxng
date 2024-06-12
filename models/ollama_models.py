@@ -4,7 +4,7 @@ import ast
 from langchain_core.messages.human import HumanMessage
 
 class OllamaJSONModel:
-    def __init__(self, temperature=0, model="llama3:instruct"):
+    def __init__(self, temperature=0, model="agent_model"):
         self.headers = {"Content-Type": "application/json"}
         self.model_endpoint = "http://localhost:11434/api/generate"
         self.temperature = temperature
@@ -46,7 +46,7 @@ class OllamaJSONModel:
             return response_formatted
 
 class OllamaModel:
-    def __init__(self, temperature=0, model="llama3:instruct"):
+    def __init__(self, temperature=0, model="agent_model"):
         self.headers = {"Content-Type": "application/json"}
         self.model_endpoint = "http://localhost:11434/api/generate"
         self.temperature = temperature

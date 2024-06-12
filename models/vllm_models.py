@@ -3,7 +3,7 @@ import json
 from langchain_core.messages.human import HumanMessage
 
 class VllmJSONModel:
-    def __init__(self, temperature=0, model="llama3:instruct", model_endpoint=None, guided_json=None, stop=None):
+    def __init__(self, temperature=0, model="agent_model", model_endpoint=None, guided_json=None, stop=None):
         self.headers = {"Content-Type": "application/json"}
         self.model_endpoint = model_endpoint
         self.temperature = temperature
@@ -73,7 +73,7 @@ class VllmJSONModel:
             return response_formatted
 
 class VllmModel:
-    def __init__(self, temperature=0, model="llama3:instruct", model_endpoint=None, stop=None):
+    def __init__(self, temperature=0, model="agent_model", model_endpoint=None, stop=None):
         self.headers = {"Content-Type": "application/json"}
         self.model_endpoint = model_endpoint
         self.temperature = temperature

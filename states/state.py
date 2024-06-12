@@ -8,7 +8,7 @@ class AgentGraphState(TypedDict):
     researcher_response: Annotated[list, add_messages]
     reporter_response: Annotated[list, add_messages]
     reviewer_response: Annotated[list, add_messages]
-    serper_response: Annotated[list, add_messages]
+    search_response: Annotated[list, add_messages]
     scraper_response: Annotated[list, add_messages]
     final_reports: Annotated[list, add_messages]
     end_chain: Annotated[list, add_messages]
@@ -47,14 +47,14 @@ def get_agent_graph_state(state:AgentGraphState, state_key:str):
         else:
             return state["reviewer_response"]
         
-    elif state_key == "serper_all":
-        return state["serper_response"]
-    elif state_key == "serper_latest":
-        if state["serper_response"]:
-            return state["serper_response"][-1]
+    elif state_key == "search_all":
+        return state["search_response"]
+    elif state_key == "search_latest":
+        if state["search_response"]:
+            return state["search_response"][-1]
         else:
-            return state["serper_response"]
-    
+            return state["search_response"]
+
     elif state_key == "scraper_all":
         return state["scraper_response"]
     elif state_key == "scraper_latest":
@@ -72,7 +72,7 @@ state = {
     "researcher_response": [],
     "reporter_response": [],
     "reviewer_response": [],
-    "serper_response": [],
+    "search_response": [],
     "scraper_response": [],
     "final_reports": [],
     "end_chain": []

@@ -1,5 +1,4 @@
 import os
-import ast
 import requests
 import json
 from langchain_community.utilities import GoogleSerperAPIWrapper
@@ -7,7 +6,6 @@ from utils.helper_functions import load_config
 from states.state import AgentGraphState
 
 config_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'config.yaml')
-
 
 def format_results(organic_results):
 
@@ -43,14 +41,14 @@ def get_google_serper(state:AgentGraphState, plan):
         # Check if 'organic' results are in the response
         if 'organic' in results:
             formatted_results = format_results(results['organic'])
-            state = {**state, "serper_response": formatted_results}
+            state = {**state, "search_response": formatted_results}
             return state
         else:
-            return {**state, "serper_response": "No organic results found."}
+            return {**state, "search_response": "No organic results found."}
 
     except requests.exceptions.HTTPError as http_err:
-        return {**state, "serper_response": f"HTTP error occurred: {http_err}"}
+        return {**state, "search_response": f"HTTP error occurred: {http_err}"}
     except requests.exceptions.RequestException as req_err:
-        return {**state, "serper_response": f"Request error occurred: {req_err}"}
+        return {**state, "search_response": f"Request error occurred: {req_err}"}
     except KeyError as key_err:
-        return {**state, "serper_response": f"Key error occurred: {key_err}"}
+        return {**state, "search_response": f"Key error occurred: {key_err}"}

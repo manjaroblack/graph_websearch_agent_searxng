@@ -29,7 +29,7 @@ from tools.basic_scraper import scrape_website
 from states.state import AgentGraphState, get_agent_graph_state, state
 # from utils.helper_functions import custom_print
 
-def create_graph(server=None, model=None, stop=None, model_endpoint=None):
+def create_graph(server=None, model=None, stop=None, model_endpoint=None, search=None):
     graph = StateGraph(AgentGraphState)
 
     graph.add_node(
@@ -54,7 +54,7 @@ def create_graph(server=None, model=None, stop=None, model_endpoint=None):
             research_question=state["research_question"], 
             feedback=lambda: get_agent_graph_state(state=state, state_key="reviewer_latest"), 
             previous_selections=lambda: get_agent_graph_state(state=state, state_key="researcher_all"), 
-            serp=lambda: get_agent_graph_state(state=state, state_key="serper_latest"),
+            search=lambda: get_agent_graph_state(state=state, state_key="search_latest"),
             model=model,
             server=server,
             guided_json=researcher_guided_json,
@@ -90,7 +90,7 @@ def create_graph(server=None, model=None, stop=None, model_endpoint=None):
             planner_agent=planner_prompt_template,
             researcher_agent=researcher_prompt_template,
             reporter_agent=reporter_prompt_template,
-            serp=lambda: get_agent_graph_state(state=state, state_key="serper_latest"),
+            search=lambda: get_agent_graph_state(state=state, state_key="search_latest"),
             model=model,
             server=server,
             guided_json=reviewer_guided_json,
@@ -99,13 +99,22 @@ def create_graph(server=None, model=None, stop=None, model_endpoint=None):
         )
     )
 
-    graph.add_node(
-        "serper_tool",
-        lambda state: get_searxng(
-            state=state,
-            plan=lambda: get_agent_graph_state(state=state, state_key="planner_latest")
+    if search == 'searxng':
+        graph.add_node(
+            "search_tool",
+            lambda state: get_searxng(
+                state=state,
+                plan=lambda: get_agent_graph_state(state=state, state_key="planner_latest")
+            )
         )
-    )
+    else:
+        graph.add_node(
+            "search_tool",
+            lambda state: get_google_serper(
+                state=state,
+                plan=lambda: get_agent_graph_state(state=state, state_key="planner_latest")
+            )
+        )
 
     graph.add_node(
         "scraper_tool",
@@ -190,8 +199,8 @@ def create_graph(server=None, model=None, stop=None, model_endpoint=None):
     # Add edges to the graph
     graph.set_entry_point("planner")
     graph.set_finish_point("end")
-    graph.add_edge("planner", "serper_tool")
-    graph.add_edge("serper_tool", "researcher")
+    graph.add_edge("planner", "search_tool")
+    graph.add_edge("search_tool", "researcher")
     graph.add_edge("researcher", "scraper_tool")
     graph.add_edge("scraper_tool", "reporter")
     graph.add_edge("reporter", "reviewer")

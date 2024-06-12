@@ -1,5 +1,3 @@
-import yaml
-import os
 from termcolor import colored
 from models.openai_models import get_open_ai, get_open_ai_json
 from models.ollama_models import OllamaModel, OllamaJSONModel
@@ -56,7 +54,7 @@ def planner_agent(state:AgentGraphState, research_question, prompt=planner_promp
 
     return state
 
-def researcher_agent(state:AgentGraphState, research_question, prompt=researcher_prompt_template, model=None, feedback=None, previous_selections=None, serp=None, server=None, guided_json=None, stop=None, model_endpoint=None):
+def researcher_agent(state:AgentGraphState, research_question, prompt=researcher_prompt_template, model=None, feedback=None, previous_selections=None, search=None, server=None, guided_json=None, stop=None, model_endpoint=None):
 
     feedback_value = feedback() if callable(feedback) else feedback
     previous_selections_value = previous_selections() if callable(previous_selections) else previous_selections
@@ -67,7 +65,7 @@ def researcher_agent(state:AgentGraphState, research_question, prompt=researcher
     researcher_prompt = prompt.format(
         feedback=feedback_value,
         previous_selections=previous_selections_value,
-        serp=serp().content,
+        search=search().content,
         datetime=get_current_utc_datetime()
     )
 
@@ -153,7 +151,7 @@ def reviewer_agent(
         researcher_agent=None, 
         reporter_agent=None,
         feedback=None,
-        serp=None,
+        search=None,
         server=None,
         guided_json=None,
         stop=None,
@@ -182,7 +180,7 @@ def reviewer_agent(
         reporter_responsibilities=reporter_agent_value,
         feedback=feedback_value,
         datetime=get_current_utc_datetime(),
-        serp=serp().content
+        search=search().content
     )
 
     messages = [

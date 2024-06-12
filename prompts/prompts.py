@@ -50,13 +50,14 @@ search results. Your task is to read through these results, select the most rele
 reason for your selection.
 
 here is the search engine results page:
-{serp}
+{search}
 
 Return your findings in the following json format:
 
     "selected_page_url": "The exact URL of the page you selected",
     "description": "A brief description of the page",
-    "reason_for_selection": "Why you selected this page"
+    "reason_for_selection": "Why you selected this page",
+    "previous_selections": {previous_selections}
 
 
 Adjust your selection based on any feedback received:
@@ -84,6 +85,10 @@ researcher_guided_json = {
         "reason_for_selection": {
             "type": "string",
             "description": "Why you selected this page"
+        },
+        "previous_selections": {
+            "type": "list",
+            "description": "List of previous selections"
         }
     },
     "required": ["selected_page_url", "description", "reason_for_selection"]
@@ -135,7 +140,7 @@ researcher: {researcher}
 reporter: {reporter}
 
 in general if you need to run different searches, you should route the conversation to the planner.
-If you need to find a different source from the existing SERP, you should route the conversation to the researcher.
+If you need to find a different source from the existing SEARCH you should route the conversation to the researcher.
 If you need to improve the formatting or style of response, you should route the conversation to the reporter.
 
 here are the agents' responsibilities to guide you with routing and feedback:
@@ -144,9 +149,9 @@ planner: {planner_responsibilities}
 researcher: {researcher_responsibilities}
 reporter: {reporter_responsibilities}
 
-You should consider the SERP the researcher used, 
+You should consider the SEARCH the researcher used, 
 this might impact your decision on the next agent to route the conversation to and any feedback you present.
-SERP: {serp}
+SEARCH: {search}
 
 You should consider the previous feedback you have given when providing new feedback.
 Feedback: {feedback}
@@ -156,12 +161,12 @@ Current date and time:
 
 You must present your feedback in the following json format:
 
-    "feedback": "Your feedback here. Along with your feedback explain why you have passed it to the specific agent",
+    "feedback": "Your feedback here",
     "pass_review": "True/False",
     "comprehensive": "True/False",
     "citations_provided": "True/False",
     "relevant_to_research_question": "True/False",
-    "suggest_next_agent": "one of the following: planner/researcher/reporter/final_report"
+    "suggest_next_agent": "planner/researcher/reporter/final_report"
 
 """
 reviewer_guided_json = {
@@ -169,7 +174,7 @@ reviewer_guided_json = {
     "properties": {
         "feedback": {
             "type": "string",
-            "description": "Your feedback here. Along with your feedback explain why you have passed it to the specific agent"
+            "description": "Your feedback here"
         },
         "pass_review": {
             "type": "boolean",
@@ -189,7 +194,7 @@ reviewer_guided_json = {
         },
         "suggest_next_agent": {
             "type": "string",
-            "description": "one of the following: planner/researcher/reporter/final_report"
+            "description": "planner/researcher/reporter/final_report"
         }
     },
     "required": ["feedback", "pass_review", "comprehensive", "citations_provided", "relevant_to_research_question", "suggest_next_agent"]
