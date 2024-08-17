@@ -1,6 +1,5 @@
 import requests
 import json
-import ast
 from langchain_core.messages.human import HumanMessage
 
 class OllamaJSONModel:

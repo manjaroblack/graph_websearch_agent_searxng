@@ -46,7 +46,6 @@
    ```
 
 2. **Enter API Keys:**
-   - **Serper API Key:** Get it from [https://serper.dev/](https://serper.dev/)
    - **OpenAI API Key:** Get it from [https://openai.com/](https://openai.com/)
    - **Gemini API Key:** Get it from [https://ai.google.dev/gemini-api](https://ai.google.dev/gemini-api)
    - **Claude API Key:** Get it from [https://docs.anthropic.com/en/api/getting-started](https://docs.anthropic.com/en/api/getting-started)

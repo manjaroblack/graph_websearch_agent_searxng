@@ -1,11 +1,6 @@
 import json
-import ast
-from langchain_core.runnables import RunnableLambda
 from langgraph.graph import StateGraph, END
-from typing import TypedDict, Annotated
 from langchain_core.messages import HumanMessage
-from models.openai_models import get_open_ai_json
-from langgraph.checkpoint.sqlite import SqliteSaver
 from agents.agents import (
     PlannerAgent,
     SelectorAgent,
@@ -27,7 +22,6 @@ from prompts.prompts import (
     router_guided_json
 
 )
-from tools.google_serper import get_google_serper
 from tools.searxng import get_searxng
 from tools.basic_scraper import scrape_website
 from states.state import AgentGraphState, get_agent_graph_state, state
@@ -67,7 +61,7 @@ def create_graph(server=None, model=None, stop=None, model_endpoint=None, temper
             research_question=state["research_question"],
             feedback=lambda: get_agent_graph_state(state=state, state_key="reviewer_latest"),
             previous_selections=lambda: get_agent_graph_state(state=state, state_key="selector_all"),
-            serp=lambda: get_agent_graph_state(state=state, state_key="serper_latest"),
+            search=lambda: get_agent_graph_state(state=state, state_key="search_latest"),
             prompt=selector_prompt_template,
         )
     )
@@ -109,7 +103,6 @@ def create_graph(server=None, model=None, stop=None, model_endpoint=None, temper
             # planner_agent=planner_prompt_template,
             # selector_agent=selector_prompt_template,
             # reporter_agent=reporter_prompt_template,
-            # serp=lambda: get_agent_graph_state(state=state, state_key="serper_latest"),
             prompt=reviewer_prompt_template
         )
     )
@@ -133,7 +126,6 @@ def create_graph(server=None, model=None, stop=None, model_endpoint=None, temper
             # planner_agent=planner_prompt_template,
             # selector_agent=selector_prompt_template,
             # reporter_agent=reporter_prompt_template,
-            # serp=lambda: get_agent_graph_state(state=state, state_key="serper_latest"),
             prompt=router_prompt_template
         )
     )

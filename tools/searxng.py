@@ -5,7 +5,6 @@ from utils.helper_functions import load_config
 from states.state import AgentGraphState
 
 load_config(os.path.join(os.path.dirname(__file__), '..', 'config', 'config.yaml'))
-load_config(os.path.join(os.path.dirname(__file__), '..', 'config', 'env.yaml'))
 searxng_search = SearxSearchWrapper(searx_host=os.environ['SEARXNG_URL'])
 
 def format_results(organic_results):
